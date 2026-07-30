@@ -4,4 +4,6 @@ python-dotenv
 flask
 pandas
 requests
+beautifulsoup4
+openpyxl
 gunicorn
