@@ -667,22 +667,9 @@ async def handle_message(
 # START
 # ============================================================
 
-def main():
+def start_telegram_bot():
 
-    web_thread = threading.Thread(
-        target=start_web_server,
-        daemon=True
-    )
-
-    web_thread.start()
-
-    print(
-        "Web server started."
-    )
-
-    print(
-        "Telegram bot is starting..."
-    )
+    print("Telegram bot is starting...")
 
     application = (
         ApplicationBuilder()
@@ -692,19 +679,41 @@ def main():
 
     application.add_handler(
         MessageHandler(
-            filters.TEXT
-            & ~filters.COMMAND,
+            filters.TEXT & ~filters.COMMAND,
             handle_message
         )
     )
 
-    print(
-        "Data analyst bot is running!"
-    )
+    print("Data analyst bot is running!")
 
     application.run_polling()
 
 
-if __name__ == "__main__":
+def main():
 
+    web_thread = threading.Thread(
+        target=start_web_server,
+        daemon=True
+    )
+
+    web_thread.start()
+
+    print("Web server started.")
+
+    start_telegram_bot()
+
+
+# Local execution
+if __name__ == "__main__":
     main()
+
+# Render/Gunicorn execution
+else:
+    telegram_thread = threading.Thread(
+        target=start_telegram_bot,
+        daemon=True
+    )
+
+    telegram_thread.start()
+
+    print("Telegram bot background thread started.")
